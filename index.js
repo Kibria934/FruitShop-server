@@ -35,25 +35,19 @@ async function run() {
       res.send(result);
     });
       console.log(uri);
-      // app.put("/fruit/:id", async (req, res) => {
-      //   const id = req.params.id;
-      //   const updateFruit = req.body;
-      //   // console.log(updateFruit);
-      //   console.log(updateFruit);
-      //   const filter = { _id: ObjectId(id) };
-      //   const options = { upsert: true };
-      //   updateDoc = {
-      //     $set: updateFruit,
-      //   };
-      //   const result = await fruitsCollection.updateOne(filter, updateDoc, options);
-      //   res.send(result)
-      // });
       app.delete("/fruit/:id", async (req, res) => {
         const id = req.params.id;
         const query = {_id:ObjectId(id)};
         const result =await fruitsCollection.deleteOne(query);
         res.send(result)
       });
+      app.get('/myFruit',async(req,res)=>{
+        const email =req.query.email;
+        const query = {email:email};
+        const cursor = fruitsCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+      })
 
    
     app.post('/fruits',async(req,res)=>{
@@ -61,7 +55,10 @@ async function run() {
       const result = await fruitsCollection.insertOne(newFruit)
       res.send(result)
     })
-
+    app.put('/fruit/:id',async(req,res)=>{
+      const id = req.params.id;
+      console.log(id);
+    })
 
   } finally {
   }
