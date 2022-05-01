@@ -34,32 +34,50 @@ async function run() {
       const result = await fruitsCollection.findOne(query);
       res.send(result);
     });
-      console.log(uri);
-      app.delete("/fruit/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = {_id:ObjectId(id)};
-        const result =await fruitsCollection.deleteOne(query);
-        res.send(result)
-      });
-      app.get('/myFruit',async(req,res)=>{
-        const email =req.query.email;
-        const query = {email:email};
-        const cursor = fruitsCollection.find(query);
-        const result = await cursor.toArray();
-        res.send(result);
-      })
 
-   
-    app.post('/fruits',async(req,res)=>{
-      const newFruit = req.body;
-      const result = await fruitsCollection.insertOne(newFruit)
-      res.send(result)
-    })
-    app.put('/fruit/:id',async(req,res)=>{
+    app.put("/fruit/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
-    })
+      const updateFruit = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          quantity: updateFruit.quantity,
+        },
+      };
+      const result = await fruitsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      console.log(result);
+      res.send(result);
+    });
+    console.log(uri);
+    app.delete("/fruit/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await fruitsCollection.deleteOne(query);
+      res.send(result);
+    });
+    app.get("/myFruit", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = fruitsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
+    app.post("/fruits", async (req, res) => {
+      const newFruit = req.body;
+      const result = await fruitsCollection.insertOne(newFruit);
+      res.send(result);
+    });
+    app.put("/fruit/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+    });
   } finally {
   }
 }
