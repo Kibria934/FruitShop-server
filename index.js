@@ -33,22 +33,36 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const result = await fruitsCollection.findOne(query);
       res.send(result);
-     
-     console.log(uri);
-      app.put("/fruit/:id", async (req, res) => {
+    });
+      console.log(uri);
+      // app.put("/fruit/:id", async (req, res) => {
+      //   const id = req.params.id;
+      //   const updateFruit = req.body;
+      //   // console.log(updateFruit);
+      //   console.log(updateFruit);
+      //   const filter = { _id: ObjectId(id) };
+      //   const options = { upsert: true };
+      //   updateDoc = {
+      //     $set: updateFruit,
+      //   };
+      //   const result = await fruitsCollection.updateOne(filter, updateDoc, options);
+      //   res.send(result)
+      // });
+      app.delete("/fruit/:id", async (req, res) => {
         const id = req.params.id;
-        const updateFruit = req.body;
-        // console.log(updateFruit);
-        console.log(updateFruit);
-        const filter = { _id: ObjectId(id) };
-        const options = { upsert: true };
-        updateDoc = {
-          $set: updateFruit,
-        };
-        const result = await fruitsCollection.updateOne(filter, updateDoc, options);
+        const query = {_id:ObjectId(id)};
+        const result =await fruitsCollection.deleteOne(query);
         res.send(result)
       });
-    });
+
+   
+    app.post('/fruits',async(req,res)=>{
+      const newFruit = req.body;
+      const result = await fruitsCollection.insertOne(newFruit)
+      res.send(result)
+    })
+
+
   } finally {
   }
 }
