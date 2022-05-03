@@ -85,6 +85,7 @@ async function run() {
     const cursor = fruitsCollection.find(query);
     const result = await cursor.toArray();
     res.send(result);
+    // console.log(result);
    }else{
      res.status(403).send({message:'Forbidden Your access'})
    }
